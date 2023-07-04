@@ -11,5 +11,5 @@ class Status {
         const std::function<bool()> isAlive;
 };
 
-std::array<Status, 2> CreateStatuses();
+std::array<Status, 8> CreateStatuses();
 
