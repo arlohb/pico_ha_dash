@@ -72,7 +72,7 @@ std::array<Status, 8> CreateStatuses() {
         Status {
             .name = "Demo 6",
             .isAlive = []() {
-                return true;
+                return false;
             },
         },
         Status {
@@ -84,7 +84,7 @@ std::array<Status, 8> CreateStatuses() {
         Status {
             .name = "Demo 8",
             .isAlive = []() {
-                return true;
+                return false;
             },
         },
     };
