@@ -6,6 +6,7 @@
 
 #include <array>
 
+#include "Ha.h"
 #include "Status.h"
 #include "Utils.h"
 #include "secrets.h"
@@ -36,9 +37,8 @@ const byte tickChar[] = {
   0b00000
 };
 
+Ha::Ha ha;
 auto statuses = CreateStatuses();
-
-int t = 0;
 
 void setup() {
     Serial.begin(115200);
@@ -60,7 +60,7 @@ void setup() {
 }
 
 void loop() {
-    dbg("");
+    dbgln("");
 
     int i = 0;
     for(Status& status : statuses) {
@@ -73,7 +73,8 @@ void loop() {
         i++;
     }
 
-    t++;
+    auto status = ha.GetStatus();
+    dbgln("HA Status body: {}", status.body);
 
     delay(1000);
 }

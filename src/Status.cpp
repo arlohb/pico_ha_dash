@@ -23,7 +23,7 @@ std::array<Status, 8> CreateStatuses() {
                 http.end();
 
                 auto error = std::string(http.errorToString(response).c_str());
-                dbg("Google: {}, {}", response, error);
+                dbgln("Google: {}, {}", response, error);
 
                 return response == 200;
             },
@@ -37,7 +37,7 @@ std::array<Status, 8> CreateStatuses() {
                 http.end();
 
                 auto error = std::string(http.errorToString(response).c_str());
-                dbg("Octopi: {}, {}", response, error);
+                dbgln("Octopi: {}, {}", response, error);
 
                 return response == 200 || response == 302;
             },
@@ -58,7 +58,7 @@ std::array<Status, 8> CreateStatuses() {
                 http.end();
 
                 auto error = std::string(http.errorToString(response).c_str());
-                dbg("HA: {}, {}", response, error);
+                dbgln("HA: {}, {}", response, error);
 
                 return response == 200;
             },

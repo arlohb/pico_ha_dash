@@ -5,6 +5,10 @@
 #include <hd44780.h>
 
 static auto dbg = [](auto fmt, auto... args) {
+    Serial.print(fmt::format(fmt, args...).c_str());
+};
+
+static auto dbgln = [](auto fmt, auto... args) {
     Serial.println(fmt::format(fmt, args...).c_str());
 };
 
