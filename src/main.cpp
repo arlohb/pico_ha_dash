@@ -62,13 +62,10 @@ void loop() {
 
     if (!digitalRead(lightBtn)) {
         dbgln("Btn pressed");
-        ha.CallService(
-            "light/toggle",
-            R"({ "entity_id": "light.tz3210_ttkgurpb_ts0504b_light" })"
-        );
+        ha.LightToggle();
     }
 
-    bool lightsOn = ha.entities["light.tz3210_ttkgurpb_ts0504b_light"].state == "on";
+    bool lightsOn = ha.IsLightOn();
 
     if (!lightsOn) {
         lcd.noBacklight();

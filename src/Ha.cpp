@@ -94,5 +94,31 @@ void Ha::CallService(std::string service, std::string body) {
     Response _ = req.Post(body);
 }
 
+bool Ha::IsLightOn() {
+    std::string state = entities["light.tz3210_ttkgurpb_ts0504b_light"].state;
+    return state == "on";
+}
+
+void Ha::LightOn() {
+    CallService(
+        "light/turn_on",
+        fmt::format(R"({{ "entity_id": "{}" }})", lightId)
+    );
+}
+
+void Ha::LightOff() {
+    CallService(
+        "light/turn_off",
+        fmt::format(R"({{ "entity_id": "{}" }})", lightId)
+    );
+}
+
+void Ha::LightToggle() {
+    CallService(
+        "light/toggle",
+        fmt::format(R"({{ "entity_id": "{}" }})", lightId)
+    );
+}
+
 }
 

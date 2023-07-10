@@ -49,6 +49,12 @@ class Ha {
         void UpdateEntities();
 
         void CallService(std::string service, std::string body);
+
+        const std::string lightId = "light.tz3210_ttkgurpb_ts0504b_light";
+        bool IsLightOn();
+        void LightOn();
+        void LightOff();
+        void LightToggle();
 };
 
 }
