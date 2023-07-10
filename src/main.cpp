@@ -16,7 +16,14 @@
 hd44780_I2Cexp lcd(39);
 
 Ha::Ha ha;
-auto statuses = CreateStatuses();
+Statuses statuses;
+
+// Both in milliseconds
+const int updateTime = 10 * 1000;
+int lastLoopTime = 0;
+int updateTimer = updateTime;
+
+int lightBtn = 28;
 
 void setup() {
     Serial.begin(115200);
@@ -33,39 +40,54 @@ void setup() {
     lcd.begin(20, 4);
     lcd.setBacklight(1);
 
+    pinMode(lightBtn, INPUT_PULLUP);
+
     CreateLcdChars(lcd);
 }
 
 void loop() {
-    delay(1000);
+    delay(10);
 
-    dbgln("");
+    int now = millis();
+    int delta = now - lastLoopTime;
+    lastLoopTime = now;
+    updateTimer += delta;
+    if (updateTimer >= updateTime) {
+        dbgln("\nUpdating");
+        updateTimer = 0;
 
-    ha.UpdateEntities();
-    auto lightsStatus = ha.entities["light.tz3210_ttkgurpb_ts0504b_light"].state;
-    bool lightsOn = lightsStatus == "on";
+        ha.UpdateEntities();
+        statuses.Update();
+    }
+
+    if (!digitalRead(lightBtn)) {
+        dbgln("Btn pressed");
+        ha.CallService(
+            "light/toggle",
+            R"({ "entity_id": "light.tz3210_ttkgurpb_ts0504b_light" })"
+        );
+    }
+
+    bool lightsOn = ha.entities["light.tz3210_ttkgurpb_ts0504b_light"].state == "on";
 
     if (!lightsOn) {
         lcd.noBacklight();
         return;
-    }
-
-    lcd.backlight();
+    } else
+        lcd.backlight();
 
     int i = 0;
-    for(Status& status : statuses) {
-        bool isAlive = status.isAlive();
+    for(Status& status : statuses.statuses) {
+        bool alive = status.alive;
 
         lcd.setCursor(10 * (i / 4), i % 4);
-        lcd.write(isAlive ? tick : cross);
+        lcd.write(alive ? tick : cross);
         lcdp(lcd, " {}", status.name);
 
         i++;
     }
 
-    auto haTime = ha.entities["sensor.time"].state;
-
     lcd.setCursor(10, 3);
-    lcdp(lcd, "{}", haTime);
+    lcdp(lcd, "{}", ha.entities["sensor.time"].state);
 }
 

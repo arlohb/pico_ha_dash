@@ -49,6 +49,19 @@ Response Request::Get() {
     return response;
 }
 
+Response Request::Post(std::string& body) {
+    int code = http.POST((const uint8_t*)body.c_str(), body.size());
+
+    Response response(code);
+
+    deserializeJson(
+        response.json,
+        http.getStream()
+    );
+
+    return response;
+}
+
 Request::~Request() {
     http.end();
 }
@@ -74,6 +87,11 @@ void Ha::UpdateEntities() {
     }
 
     response.json.clear();
+}
+
+void Ha::CallService(std::string service, std::string body) {
+    Request req(fmt::format("services/{}", service));
+    Response _ = req.Post(body);
 }
 
 }

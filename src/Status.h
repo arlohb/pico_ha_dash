@@ -36,8 +36,17 @@ class Status {
     public:
         const std::string name;
 
+        bool alive;
+
         const std::function<bool()> isAlive;
 };
 
-std::array<Status, 7> CreateStatuses();
+class Statuses {
+    public:
+        std::array<Status, 7> statuses;
+
+        Statuses();
+
+        void Update();
+};
 

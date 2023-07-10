@@ -32,6 +32,7 @@ class Request {
         ~Request();
 
         Response Get();
+        Response Post(std::string& body);
 
     private:
         HTTPClient http;
@@ -46,6 +47,8 @@ class Ha {
 
         Response GetStatus();
         void UpdateEntities();
+
+        void CallService(std::string service, std::string body);
 };
 
 }

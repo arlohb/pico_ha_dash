@@ -11,8 +11,8 @@ void CreateLcdChars(hd44780& lcd) {
     lcd.createChar(tick, tickChar);
 }
 
-std::array<Status, 7> CreateStatuses() {
-    return {
+Statuses::Statuses():
+    statuses({
         Status {
             .name = "WiFi",
             .isAlive = []() {
@@ -86,6 +86,10 @@ std::array<Status, 7> CreateStatuses() {
                 return true;
             },
         },
-    };
+    }) {}
+
+void Statuses::Update() {
+    for(Status& status : statuses)
+        status.alive = status.isAlive();
 }
 
