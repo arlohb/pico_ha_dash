@@ -15,30 +15,6 @@
 
 hd44780_I2Cexp lcd(39);
 
-const int cross = 0;
-const byte crossChar[] = {
-  0b00000,
-  0b10001,
-  0b01010,
-  0b00100,
-  0b00100,
-  0b01010,
-  0b10001,
-  0b00000
-};
-
-const int tick = 1;
-const byte tickChar[] = {
-  0b00000,
-  0b00000,
-  0b01010,
-  0b00000,
-  0b10001,
-  0b01110,
-  0b00000,
-  0b00000
-};
-
 Ha::Ha ha;
 auto statuses = CreateStatuses();
 
@@ -57,8 +33,7 @@ void setup() {
     lcd.begin(20, 4);
     lcd.setBacklight(1);
 
-    lcd.createChar(cross, crossChar);
-    lcd.createChar(tick, tickChar);
+    CreateLcdChars(lcd);
 }
 
 void loop() {

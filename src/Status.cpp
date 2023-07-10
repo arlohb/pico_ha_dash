@@ -6,6 +6,11 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
+void CreateLcdChars(hd44780& lcd) {
+    lcd.createChar(cross, crossChar);
+    lcd.createChar(tick, tickChar);
+}
+
 std::array<Status, 7> CreateStatuses() {
     return {
         Status {
