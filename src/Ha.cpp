@@ -1,6 +1,7 @@
 #include "Ha.h"
 
 #include <fmt/core.h>
+#include <ArduinoJson.h>
 #include "Utils.h"
 #include "secrets.h"
 
@@ -8,6 +9,21 @@ namespace Ha {
 
 const std::string Ha::host = secrets::haHost;
 const std::string Ha::token = secrets::haToken;
+
+StaticJsonDocument<64> CreateEntityFilter() {
+    StaticJsonDocument<64> filter;
+    filter[0]["entity_id"] = true;
+    filter[0]["state"] = true;
+    // TODO use this.
+    /* filter[0]["attributes"] = true; */
+
+    return filter;
+}
+const StaticJsonDocument<64> Response::entityFilter = CreateEntityFilter();
+
+Response::~Response() {
+    json.clear();
+}
 
 Request::Request(std::string endpoint) {
     http.begin(fmt::format("{}/api/{}", Ha::host, endpoint).c_str());
@@ -22,14 +38,13 @@ Request::Request(std::string endpoint) {
 Response Request::Get() {
     int code = http.GET();
 
-    WiFiClient stream = http.getStream();
+    Response response(code);
 
-    Response response(code, "");
-
-    while (stream.available()) {
-        int data = stream.read();
-        response.body += (char)data;
-    }
+    deserializeJson(
+        response.json,
+        http.getStream(),
+        DeserializationOption::Filter(Response::entityFilter)
+    );
 
     return response;
 }
@@ -43,9 +58,22 @@ Response Ha::GetStatus() {
     return req.Get();
 }
 
-Response Ha::GetStates() {
+void Ha::UpdateEntities() {
     Request req("states");
-    return req.Get();
+    Response response = req.Get();
+
+    entities.clear();
+
+    for(const JsonVariant& obj : response.json.as<JsonArray>()) {
+        Entity entity;
+
+        entity.entityId = obj["entity_id"].as<JsonString>().c_str();
+        entity.state = obj["state"].as<JsonString>().c_str();
+
+        entities[entity.entityId] = entity;
+    }
+
+    response.json.clear();
 }
 
 }

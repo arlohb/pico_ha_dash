@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <Wire.h>
+#include <ctime>
 #include <hd44780.h>
 #include <hd44780ioClass/hd44780_I2Cexp.h>
 
 #include <array>
+#include <chrono>
 
 #include "Ha.h"
 #include "Status.h"
@@ -73,8 +75,12 @@ void loop() {
         i++;
     }
 
-    auto status = ha.GetStatus();
-    dbgln("HA Status body: {}", status.body);
+    ha.UpdateEntities();
+    dbgln("Num of entities: {}", ha.entities.size());
+    auto haTime = ha.entities["sensor.time"].state;
+
+    lcd.setCursor(10, 3);
+    lcdp(lcd, "{}", haTime);
 
     delay(1000);
 }

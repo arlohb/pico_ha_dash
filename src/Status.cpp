@@ -6,7 +6,7 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-std::array<Status, 8> CreateStatuses() {
+std::array<Status, 7> CreateStatuses() {
     return {
         Status {
             .name = "WiFi",
@@ -79,12 +79,6 @@ std::array<Status, 8> CreateStatuses() {
             .name = "Demo 7",
             .isAlive = []() {
                 return true;
-            },
-        },
-        Status {
-            .name = "Demo 8",
-            .isAlive = []() {
-                return false;
             },
         },
     };

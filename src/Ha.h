@@ -1,27 +1,29 @@
 #pragma once
 
+#include <ArduinoJson.h>
 #include <HTTPClient.h>
+#include <unordered_map>
 #include <string>
 
 namespace Ha {
 
-class State {
+class Entity {
     public:
         std::string entityId;
-        // TODO Make a date time
-        std::string lastChanged;
-        // TODO Standardise somehow
         std::string state;
 };
 
 class Response {
     public:
-        int code;
-        std::string body;
+        static const StaticJsonDocument<64> entityFilter;
 
-        Response(int code, std::string body):
-            code(code),
-            body(body) {}
+        int code;
+        ArduinoJson::StaticJsonDocument<32768> json;
+
+        Response(int code):
+            code(code) {}
+
+        ~Response();
 };
 
 class Request {
@@ -40,8 +42,10 @@ class Ha {
         static const std::string host;
         static const std::string token;
 
+        std::unordered_map<std::string, Entity> entities;
+
         Response GetStatus();
-        Response GetStates();
+        void UpdateEntities();
 };
 
 }
