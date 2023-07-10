@@ -62,7 +62,20 @@ void setup() {
 }
 
 void loop() {
+    delay(1000);
+
     dbgln("");
+
+    ha.UpdateEntities();
+    auto lightsStatus = ha.entities["light.tz3210_ttkgurpb_ts0504b_light"].state;
+    bool lightsOn = lightsStatus == "on";
+
+    if (!lightsOn) {
+        lcd.noBacklight();
+        return;
+    }
+
+    lcd.backlight();
 
     int i = 0;
     for(Status& status : statuses) {
@@ -75,13 +88,9 @@ void loop() {
         i++;
     }
 
-    ha.UpdateEntities();
-    dbgln("Num of entities: {}", ha.entities.size());
     auto haTime = ha.entities["sensor.time"].state;
 
     lcd.setCursor(10, 3);
     lcdp(lcd, "{}", haTime);
-
-    delay(1000);
 }
 
