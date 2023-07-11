@@ -3,10 +3,16 @@
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 
+typedef StaticJsonDocument<64> Filter;
+
+class Filters {
+    public:
+        static const Filter none;
+        static const Filter entities;
+};
+
 class Response {
     public:
-        static const StaticJsonDocument<64> entityFilter;
-
         int code;
         ArduinoJson::StaticJsonDocument<32768> json;
 
@@ -21,7 +27,7 @@ class Request {
         Request(std::string endpoint);
         ~Request();
 
-        Response Get();
+        Response Get(Filter filter);
         Response Post(std::string& body);
 
     private:

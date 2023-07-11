@@ -9,12 +9,12 @@ const std::string Ha::token = secrets::haToken;
 
 Response Ha::GetStatus() {
     Request req("");
-    return req.Get();
+    return req.Get(Filters::none);
 }
 
 void Ha::UpdateEntities() {
     Request req("states");
-    Response response = req.Get();
+    Response response = req.Get(Filters::entities);
 
     entities.clear();
 

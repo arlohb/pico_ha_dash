@@ -3,16 +3,17 @@
 #include "Ha.h"
 #include <fmt/core.h>
 
-StaticJsonDocument<64> CreateEntityFilter() {
-    StaticJsonDocument<64> filter;
+const Filter Filters::none;
+
+const Filter Filters::entities = []() {
+    Filter filter;
     filter[0]["entity_id"] = true;
     filter[0]["state"] = true;
     // TODO use this.
     /* filter[0]["attributes"] = true; */
 
     return filter;
-}
-const StaticJsonDocument<64> Response::entityFilter = CreateEntityFilter();
+}();
 
 Response::~Response() {
     json.clear();
@@ -28,7 +29,7 @@ Request::Request(std::string endpoint) {
     http.addHeader("Content-Type", "application/json");
 }
 
-Response Request::Get() {
+Response Request::Get(Filter filter) {
     int code = http.GET();
 
     Response response(code);
@@ -36,7 +37,7 @@ Response Request::Get() {
     deserializeJson(
         response.json,
         http.getStream(),
-        DeserializationOption::Filter(Response::entityFilter)
+        DeserializationOption::Filter(filter)
     );
 
     return response;
