@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Octopi.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 #include <unordered_map>
@@ -44,6 +45,8 @@ class Ha {
         static const std::string token;
 
         std::unordered_map<std::string, Entity> entities;
+
+        Octopi octopi;
 
         Response GetStatus();
         void UpdateEntities();

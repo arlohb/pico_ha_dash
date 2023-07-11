@@ -95,5 +95,11 @@ void loop() {
 
     lcd.setCursor(0, 0);
     lcdp(lcd, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
+    
+    if (ha.octopi.printStatus == "Printing") {
+        lcd.setCursor(10, 2);
+
+        lcdp(lcd, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
+    }
 }
 

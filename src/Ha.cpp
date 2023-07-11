@@ -87,6 +87,22 @@ void Ha::UpdateEntities() {
     }
 
     response.json.clear();
+
+    octopi.printFile = entities["sensor.octoprint_print_file"].state;
+    octopi.printStatus = entities["sensor.octoprint_print_status"].state;
+    octopi.printProgress = std::stoi(entities["sensor.octoprint_print_progress"].state);
+
+    std::string completionDate = entities["sensor.octoprint_approximate_completion_time"].state;
+    octopi.completionTime = completionDate.substr(completionDate.length() - 8, 5);
+    octopi.printTimeTotal = entities["sensor.octoprint_approximate_total_print_time"].state;
+    octopi.printTimeDone = entities["sensor.octoprint_print_time"].state;
+    octopi.printTimeLeft = entities["sensor.octoprint_print_time_left"].state;
+
+    octopi.socTemp = std::stof(entities["sensor.octoprint_soc_temperature"].state);
+    octopi.bedTarget = std::stof(entities["sensor.octoprint_bed_target"].state);
+    octopi.bedTemp = std::stof(entities["sensor.octoprint_bed_temperature"].state);
+    octopi.toolTarget = std::stof(entities["sensor.octoprint_tool_0_target"].state);
+    octopi.toolTemp = std::stof(entities["sensor.octoprint_tool_0_temperature"].state);
 }
 
 void Ha::CallService(std::string service, std::string body) {
