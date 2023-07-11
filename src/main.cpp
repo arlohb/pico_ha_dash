@@ -57,7 +57,7 @@ void setup() {
 }
 
 void loop() {
-    delay(10);
+    delay(200);
     rp2040.wdt_reset();
 
     int now = millis();
@@ -88,18 +88,16 @@ void loop() {
 
         lcd.setCursor(0, i + 1);
         lcd.write(alive ? tick : cross);
-        lcdp(lcd, " {}", status.name);
+        lcdp(lcd, 2, i + 1, "{}", status.name);
 
         i++;
     }
 
-    lcd.setCursor(0, 0);
-    lcdp(lcd, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
+    lcdp(lcd, 0, 0, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
     
-    if (ha.octopi.printStatus == "Printing") {
-        lcd.setCursor(10, 2);
-
-        lcdp(lcd, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
-    }
+    if (ha.octopi.printStatus == "Printing")
+        lcdp(lcd, 10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
+    else
+        lcdp(lcd, 10, 2, "          ");
 }
 

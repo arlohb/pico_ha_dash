@@ -12,7 +12,8 @@ static auto dbgln = [](auto fmt, auto... args) {
     Serial.println(fmt::format(fmt, args...).c_str());
 };
 
-static auto lcdp = [](auto& lcd, auto fmt, auto... args) {
+static auto lcdp = [](auto& lcd, const int x, const int y, auto fmt, auto... args) {
+    lcd.setCursor(x, y);
     lcd.print(fmt::format(fmt, args...).c_str());
 };
 
