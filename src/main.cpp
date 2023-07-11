@@ -25,27 +25,35 @@ int updateTimer = updateTime;
 
 int lightBtn = 28;
 
-void setup() {
-    // This is the max value of 8.3 secs
-    rp2040.wdt_begin(8.3*1000);
-
-    Serial.begin(115200);
-
+void SetupWiFi() {
     WiFi.begin(secrets::ssid.c_str(), secrets::password.c_str());
 
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-    }
+    while (WiFi.status() != WL_CONNECTED)
+        delay(200);
 
+    NTP.begin("pool.ntp.org", "time.nist.gov");
+    NTP.waitSet();
+}
+
+void SetupLCD() {
     Wire.setSDA(12);
     Wire.setSCL(13);
 
     lcd.begin(20, 4);
     lcd.setBacklight(1);
 
+    CreateLcdChars(lcd);
+}
+
+void setup() {
+    Serial.begin(115200);
+    SetupWiFi();
+    SetupLCD();
+
     pinMode(lightBtn, INPUT_PULLUP);
 
-    CreateLcdChars(lcd);
+    // This is the max value of 8.3 secs
+    rp2040.wdt_begin(8.3*1000);
 }
 
 void loop() {
@@ -68,9 +76,7 @@ void loop() {
         ha.LightToggle();
     }
 
-    bool lightsOn = ha.IsLightOn();
-
-    if (!lightsOn) {
+    if (!ha.IsLightOn()) {
         lcd.noBacklight();
         return;
     } else
