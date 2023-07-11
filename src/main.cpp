@@ -15,7 +15,7 @@
 
 hd44780_I2Cexp lcd(39);
 
-Ha::Ha ha;
+Ha ha;
 Statuses statuses;
 
 // All in milliseconds
