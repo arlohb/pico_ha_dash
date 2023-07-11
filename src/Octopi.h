@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Entity.h"
 #include <string>
 
 class Octopi {
@@ -18,5 +19,7 @@ class Octopi {
         float bedTemp;
         float toolTarget;
         float toolTemp;
+
+        void Update(Entities& entities);
 };
 

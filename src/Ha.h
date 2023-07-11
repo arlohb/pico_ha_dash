@@ -1,23 +1,15 @@
 #pragma once
 
+#include "Entity.h"
 #include "Octopi.h"
 #include "Request.h"
-#include <unordered_map>
-#include <string>
-
-class Entity {
-    public:
-        std::string entityId;
-        std::string state;
-        std::unordered_map<std::string, std::string> attrs;
-};
 
 class Ha {
     public:
         static const std::string host;
         static const std::string token;
 
-        std::unordered_map<std::string, Entity> entities;
+        Entities entities;
 
         Octopi octopi;
 
