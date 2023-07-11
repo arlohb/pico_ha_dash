@@ -14,13 +14,7 @@ void CreateLcdChars(hd44780& lcd) {
 Statuses::Statuses():
     statuses({
         Status {
-            .name = "WiFi",
-            .isAlive = []() {
-                return WiFi.isConnected();
-            },
-        },
-        Status {
-            .name = "Google",
+            .name = "Wifi",
             .isAlive = []() {
                 HTTPClient http;
                 http.begin("http://www.google.com");
@@ -66,24 +60,6 @@ Statuses::Statuses():
                 dbgln("HA: {}, {}", response, error);
 
                 return response == 200;
-            },
-        },
-        Status {
-            .name = "Demo 5",
-            .isAlive = []() {
-                return true;
-            },
-        },
-        Status {
-            .name = "Demo 6",
-            .isAlive = []() {
-                return false;
-            },
-        },
-        Status {
-            .name = "Demo 7",
-            .isAlive = []() {
-                return true;
             },
         },
     }) {}

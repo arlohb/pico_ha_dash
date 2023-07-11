@@ -43,7 +43,7 @@ class Status {
 
 class Statuses {
     public:
-        std::array<Status, 7> statuses;
+        std::array<Status, 3> statuses;
 
         Statuses();
 

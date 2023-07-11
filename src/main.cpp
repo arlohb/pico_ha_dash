@@ -18,7 +18,7 @@ hd44780_I2Cexp lcd(39);
 Ha::Ha ha;
 Statuses statuses;
 
-// Both in milliseconds
+// All in milliseconds
 const int updateTime = 10 * 1000;
 int lastLoopTime = 0;
 int updateTimer = updateTime;
@@ -26,6 +26,9 @@ int updateTimer = updateTime;
 int lightBtn = 28;
 
 void setup() {
+    // This is the max value of 8.3 secs
+    rp2040.wdt_begin(8.3*1000);
+
     Serial.begin(115200);
 
     WiFi.begin(secrets::ssid.c_str(), secrets::password.c_str());
@@ -47,6 +50,7 @@ void setup() {
 
 void loop() {
     delay(10);
+    rp2040.wdt_reset();
 
     int now = millis();
     int delta = now - lastLoopTime;
@@ -61,7 +65,6 @@ void loop() {
     }
 
     if (!digitalRead(lightBtn)) {
-        dbgln("Btn pressed");
         ha.LightToggle();
     }
 
@@ -77,14 +80,14 @@ void loop() {
     for(Status& status : statuses.statuses) {
         bool alive = status.alive;
 
-        lcd.setCursor(10 * (i / 4), i % 4);
+        lcd.setCursor(0, i + 1);
         lcd.write(alive ? tick : cross);
         lcdp(lcd, " {}", status.name);
 
         i++;
     }
 
-    lcd.setCursor(10, 3);
-    lcdp(lcd, "{}", ha.entities["sensor.time"].state);
+    lcd.setCursor(0, 0);
+    lcdp(lcd, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
 }
 
