@@ -9,6 +9,7 @@ class Entity {
     public:
         std::string entityId;
         std::string state;
+        std::unordered_map<std::string, std::string> attrs;
 };
 
 class Ha {

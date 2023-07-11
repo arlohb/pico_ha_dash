@@ -24,6 +24,13 @@ void Ha::UpdateEntities() {
         entity.entityId = obj["entity_id"].as<JsonString>().c_str();
         entity.state = obj["state"].as<JsonString>().c_str();
 
+        for(const JsonPair& attr : obj["attributes"].as<JsonObject>()) {
+            const char* key = attr.key().c_str();
+            const std::string value = attr.value().as<std::string>();
+
+            entity.attrs[key] = value;
+        }
+
         entities[entity.entityId] = entity;
     }
 

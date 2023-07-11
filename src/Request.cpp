@@ -9,8 +9,7 @@ const Filter Filters::entities = []() {
     Filter filter;
     filter[0]["entity_id"] = true;
     filter[0]["state"] = true;
-    // TODO use this.
-    /* filter[0]["attributes"] = true; */
+    filter[0]["attributes"] = true;
 
     return filter;
 }();

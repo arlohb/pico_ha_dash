@@ -14,7 +14,7 @@ class Filters {
 class Response {
     public:
         int code;
-        ArduinoJson::StaticJsonDocument<32768> json;
+        ArduinoJson::StaticJsonDocument<65536> json;
 
         Response(int code):
             code(code) {}
