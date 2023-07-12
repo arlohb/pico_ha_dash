@@ -1,8 +1,13 @@
 #include "Octopi.h"
 
 void Octopi::Update(Entities& entities) {
-    printFile = entities["sensor.octoprint_print_file"].state;
     printStatus = entities["sensor.octoprint_print_status"].state;
+
+    // To stop later operations from failing
+    if (printStatus == "unavailable")
+        return;
+
+    printFile = entities["sensor.octoprint_print_file"].state;
     printProgress = std::stoi(entities["sensor.octoprint_print_progress"].state);
 
     std::string completionDate = entities["sensor.octoprint_approximate_completion_time"].state;
