@@ -12,6 +12,13 @@ static auto dbgln = [](auto fmt, auto... args) {
     Serial.println(fmt::format(fmt, args...).c_str());
 };
 
+static void dbgHeap() {
+    dbgln("Used {} out of {} bytes of the heap",
+        rp2040.getUsedHeap(),
+        rp2040.getTotalHeap()
+    );
+}
+
 static auto lcdp = [](auto& lcd, const int x, const int y, auto fmt, auto... args) {
     lcd.setCursor(x, y);
     lcd.print(fmt::format(fmt, args...).c_str());
