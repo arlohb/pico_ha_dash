@@ -69,7 +69,9 @@ void loop() {
         updateTimer = 0;
 
         ha.UpdateEntities();
+        rp2040.wdt_reset();
         statuses.Update();
+        rp2040.wdt_reset();
     }
 
     if (!digitalRead(lightBtn)) {
