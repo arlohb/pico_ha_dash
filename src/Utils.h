@@ -4,11 +4,13 @@
 #include <fmt/core.h>
 #include <hd44780.h>
 
-static auto dbg = [](auto fmt, auto... args) {
+template<typename... T>
+static void dbg (fmt::format_string<T...> fmt, T&&... args) {
     Serial.print(fmt::format(fmt, args...).c_str());
 };
 
-static auto dbgln = [](auto fmt, auto... args) {
+template<typename... T>
+static void dbgln (fmt::format_string<T...> fmt, T&&... args) {
     Serial.println(fmt::format(fmt, args...).c_str());
 };
 
@@ -19,7 +21,14 @@ static void dbgHeap() {
     );
 }
 
-static auto lcdp = [](auto& lcd, const int x, const int y, auto fmt, auto... args) {
+template<typename... T>
+static void lcdp (
+    hd44780& lcd,
+    const int x,
+    const int y,
+    fmt::format_string<T...> fmt,
+    T... args
+) {
     lcd.setCursor(x, y);
     lcd.print(fmt::format(fmt, args...).c_str());
 };
