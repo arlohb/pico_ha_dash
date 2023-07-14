@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <Wire.h>
-#include <ctime>
 #include <hd44780.h>
 #include <hd44780ioClass/hd44780_I2Cexp.h>
 
 #include <array>
 #include <chrono>
+#include <numeric>
 
 #include "Ha.h"
 #include "Status.h"
@@ -101,5 +101,16 @@ void loop() {
         lcdp(lcd, 10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
     else
         lcdp(lcd, 10, 2, "          ");
+
+    const int completed = std::accumulate(
+        ha.habitica.dailies.begin(),
+        ha.habitica.dailies.end(),
+        0,
+        [](int sum, Daily& daily){
+            return sum + daily.completed;
+        }
+    );
+
+    lcdp(lcd, 17, 3, "{}/{}", completed, ha.habitica.dailies.size());
 }
 

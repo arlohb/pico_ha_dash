@@ -37,7 +37,7 @@ void Ha::UpdateEntities() {
     response.json.clear();
 
     octopi.Update(entities);
-
+    habitica.Update(entities);
 }
 
 void Ha::CallService(std::string service, std::string body) {

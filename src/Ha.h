@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Habitica.h"
 #include "Octopi.h"
 #include "Request.h"
 
@@ -12,6 +13,7 @@ class Ha {
         Entities entities;
 
         Octopi octopi;
+        Habitica habitica;
 
         Response GetStatus();
         void UpdateEntities();
