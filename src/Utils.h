@@ -5,12 +5,12 @@
 #include <hd44780.h>
 
 template<typename... T>
-static void dbg (fmt::format_string<T...> fmt, T&&... args) {
+static void dbg(fmt::format_string<T...> fmt, T&&... args) {
     Serial.print(fmt::format(fmt, args...).c_str());
 };
 
 template<typename... T>
-static void dbgln (fmt::format_string<T...> fmt, T&&... args) {
+static void dbgln(fmt::format_string<T...> fmt, T&&... args) {
     Serial.println(fmt::format(fmt, args...).c_str());
 };
 
@@ -22,7 +22,7 @@ static void dbgHeap() {
 }
 
 template<typename... T>
-static void lcdp (
+static void lcdp(
     hd44780& lcd,
     const int x,
     const int y,
