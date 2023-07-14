@@ -2,3 +2,4 @@
 .cache
 src/secrets.h
 compile_commands.json
+.ccls-cache
