@@ -128,7 +128,6 @@ void Program::Loop() {
     if (arduino::serialEvent2Run)
         arduino::serialEvent2Run();
 
-    delay(200);
     rp2040.wdt_reset();
 
     MaybeUpdate();
