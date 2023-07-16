@@ -33,7 +33,7 @@ void Habitica::Update(Entities& entities) {
     const auto& dailiesAttrs = entities["sensor.habitica_arlo_dailys"].attrs;
     
     for(const auto& [id, jsonString]: dailiesAttrs) {
-        if (Habitica::IsId(id)) continue;
+        if (!Habitica::IsId(id)) continue;
 
         StaticJsonDocument<1024> json;
         deserializeJson(json, jsonString);
@@ -46,7 +46,7 @@ void Habitica::Update(Entities& entities) {
     const auto& todosAttrs = entities["sensor.habitica_arlo_todos"].attrs;
 
     for(const auto& [id, jsonString]: todosAttrs) {
-        if (Habitica::IsId(id)) continue;
+        if (!Habitica::IsId(id)) continue;
 
         StaticJsonDocument<1024> json;
         deserializeJson(json, jsonString);
@@ -57,6 +57,6 @@ void Habitica::Update(Entities& entities) {
 }
 
 bool Habitica::IsId(const std::string& id) {
-    return id.length() != 37 && id[8] != '-';
+    return (id.length() == 36) && (id[8] == '-');
 }
 
