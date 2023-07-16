@@ -3,17 +3,16 @@
 #include <Wire.h>
 
 Lcd::Lcd(std::unique_ptr<hd44780> lcd):
-    lcd(std::move(lcd)) {}
-
-void Lcd::Begin() {
+    lcd(std::move(lcd))
+{
     Wire.setSDA(12);
     Wire.setSCL(13);
 
-    lcd->begin(20, 4);
-    lcd->setBacklight(1);
+    this->lcd->begin(20, 4);
+    this->lcd->setBacklight(1);
 
-    lcd->createChar(cross, crossChar);
-    lcd->createChar(tick, tickChar);
+    this->lcd->createChar(cross, crossChar);
+    this->lcd->createChar(tick, tickChar);
 }
 
 void Lcd::BacklightOn() {

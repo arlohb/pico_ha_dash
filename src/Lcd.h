@@ -10,8 +10,6 @@ class Lcd {
     public:
         Lcd(std::unique_ptr<hd44780> lcd);
 
-        void Begin();
-
         template<typename... T>
         void Print(
             const int x,
