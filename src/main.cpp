@@ -10,14 +10,13 @@
 #include "Status.h"
 #include "Utils.h"
 #include "Lcd.h"
+#include "Io.h"
 #include "secrets.h"
 
 // All in milliseconds
 const int updateTime = 10 * 1000;
 int lastLoopTime = 0;
 int updateTimer = updateTime;
-
-const int lightBtn = 28;
 
 void SetupWiFi() {
     cyw43_arch_init_with_country(CYW43_COUNTRY_UK);
@@ -50,11 +49,10 @@ void Setup() {
 int main() {
     Setup();
 
+    Io io;
     Lcd lcd(std::make_unique<hd44780_I2Cexp>(39));
     Ha ha;
     Statuses statuses;
-
-    pinMode(lightBtn, INPUT_PULLUP);
 
     while (true) {
         if (arduino::serialEventRun)
@@ -81,7 +79,7 @@ int main() {
             rp2040.wdt_reset();
         }
 
-        if (!digitalRead(lightBtn)) {
+        if (io.LightBtnPressed()) {
             ha.LightToggle();
         }
 
