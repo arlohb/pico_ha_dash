@@ -5,6 +5,17 @@
 #include "Lcd.h"
 #include "Io.h"
 
+enum class Page {
+    Status,
+    Todos,
+    Page3,
+    Page4,
+    Page5,
+    Page6,
+    Page7,
+    Page8,
+};
+
 class Program {
     public:
         Program();
@@ -14,6 +25,13 @@ class Program {
     private:
         void MaybeUpdate();
         void Update();
+
+        Page page = Page::Status;
+
+        void DrawPage();
+        void DrawStatus();
+        void DrawTodos();
+        void DrawEmptyPage(int i);
 
         Io io;
         Lcd lcd;

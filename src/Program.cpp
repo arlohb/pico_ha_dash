@@ -62,6 +62,64 @@ void Program::Update() {
     rp2040.wdt_reset();
 }
 
+void Program::DrawPage() {
+    switch (page) {
+        case Page::Status: DrawStatus(); break;
+        case Page::Todos: DrawTodos(); break;
+        case Page::Page3: DrawEmptyPage(3); break;
+        case Page::Page4: DrawEmptyPage(4); break;
+        case Page::Page5: DrawEmptyPage(5); break;
+        case Page::Page6: DrawEmptyPage(6); break;
+        case Page::Page7: DrawEmptyPage(7); break;
+        case Page::Page8: DrawEmptyPage(8); break;
+    }
+}
+
+void Program::DrawStatus() {
+    int i = 0;
+    for(Status& status : statuses.statuses) {
+        bool alive = status.alive;
+
+        lcd.Print(0, i + 1, "{} {:<18}", alive ? lcd.tick : lcd.cross, status.name);
+
+        i++;
+    }
+
+    lcd.Print(0, 0, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
+    
+    if (ha.octopi.printStatus == "Printing")
+        lcd.Print(10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
+
+    const int completed = std::accumulate(
+        ha.habitica.dailies.begin(),
+        ha.habitica.dailies.end(),
+        0,
+        [](int sum, Daily& daily){
+            return sum + daily.completed;
+        }
+    );
+
+    lcd.Print(17, 3, "{}/{}", completed, ha.habitica.dailies.size());
+}
+
+void Program::DrawTodos() {
+    int y = 0;
+    for (auto& todo : ha.habitica.todos) {
+        lcd.Print(0, y++, "{:<20}", todo.text);
+    }
+
+    for (int yEmpty = y; yEmpty < 4; yEmpty++) {
+        lcd.Print(0, yEmpty, "{:<20}", "");
+    }
+}
+
+void Program::DrawEmptyPage(int i) {
+    lcd.Print(0, 0, "Page {:<15}", i);
+    lcd.Print(0, 1, "{:<20}", "");
+    lcd.Print(0, 2, "{:<20}", "");
+    lcd.Print(0, 3, "{:<20}", "");
+}
+
 void Program::Loop() {
     if (arduino::serialEventRun)
         arduino::serialEventRun();
@@ -84,32 +142,9 @@ void Program::Loop() {
         return;
     } else
         lcd.BacklightOn();
-
-    int i = 0;
-    for(Status& status : statuses.statuses) {
-        bool alive = status.alive;
-
-        lcd.Print(0, i + 1, "{} {}", alive ? lcd.tick : lcd.cross, status.name);
-
-        i++;
-    }
-
-    lcd.Print(0, 0, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
     
-    if (ha.octopi.printStatus == "Printing")
-        lcd.Print(10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
-    else
-        lcd.Print(10, 2, "          ");
+    page = (Page)io.Selector();
 
-    const int completed = std::accumulate(
-        ha.habitica.dailies.begin(),
-        ha.habitica.dailies.end(),
-        0,
-        [](int sum, Daily& daily){
-            return sum + daily.completed;
-        }
-    );
-
-    lcd.Print(17, 3, "{}/{}", completed, ha.habitica.dailies.size());
+    DrawPage();
 }
 
