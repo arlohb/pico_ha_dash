@@ -8,7 +8,7 @@
 enum class Page {
     Status,
     Todos,
-    Page3,
+    Player,
     Page4,
     Page5,
     Page6,
@@ -31,6 +31,7 @@ class Program {
         void DrawPage();
         void DrawStatus();
         void DrawTodos();
+        void DrawPlayer();
         void DrawEmptyPage(int i);
 
         Io io;

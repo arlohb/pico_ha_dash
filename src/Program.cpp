@@ -66,7 +66,7 @@ void Program::DrawPage() {
     switch (page) {
         case Page::Status: DrawStatus(); break;
         case Page::Todos: DrawTodos(); break;
-        case Page::Page3: DrawEmptyPage(3); break;
+        case Page::Player: DrawPlayer(); break;
         case Page::Page4: DrawEmptyPage(4); break;
         case Page::Page5: DrawEmptyPage(5); break;
         case Page::Page6: DrawEmptyPage(6); break;
@@ -111,6 +111,23 @@ void Program::DrawTodos() {
     for (int yEmpty = y; yEmpty < 4; yEmpty++) {
         lcd.Print(0, yEmpty, "{:<20}", "");
     }
+}
+
+void Program::DrawPlayer() {
+    auto DrawBar = [&](const int y, const char* label, const int val, const int max) {
+        lcd.Print(0, y, "{} {:<3}[{:=<{}}{:<{}}]{:>3}",
+            label,
+            val,
+            "", (int)(9 * val / max),
+            "", (int)(9 - 9 * val / max),
+            max
+        );
+    };
+
+    DrawBar(0, "HP", ha.habitica.health, ha.habitica.maxHealth);
+    DrawBar(1, "XP", ha.habitica.exp, ha.habitica.expToNextLvl);
+    DrawBar(2, "MA", ha.habitica.mana, ha.habitica.maxMana);
+    lcd.Print(0, 3, "{:<20}", "");
 }
 
 void Program::DrawEmptyPage(int i) {
