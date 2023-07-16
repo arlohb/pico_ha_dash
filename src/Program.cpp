@@ -140,10 +140,6 @@ void Program::DrawEmptyPage(int i) {
 void Program::Loop() {
     if (arduino::serialEventRun)
         arduino::serialEventRun();
-    if (arduino::serialEvent1Run)
-        arduino::serialEvent1Run();
-    if (arduino::serialEvent2Run)
-        arduino::serialEvent2Run();
 
     rp2040.wdt_reset();
 
