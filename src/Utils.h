@@ -23,15 +23,3 @@ static void dbgHeap() {
     );
 }
 
-template<typename... T>
-static void lcdp(
-    hd44780& lcd,
-    const int x,
-    const int y,
-    fmt::format_string<T...> fmt,
-    T... args
-) {
-    lcd.setCursor(x, y);
-    lcd.print(fmt::format(fmt, args...).c_str());
-};
-

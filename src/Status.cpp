@@ -2,14 +2,8 @@
 #include "Utils.h"
 #include "secrets.h"
 
-#include <fmt/core.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
-
-void CreateLcdChars(hd44780& lcd) {
-    lcd.createChar(cross, crossChar);
-    lcd.createChar(tick, tickChar);
-}
 
 Statuses::Statuses():
     statuses({

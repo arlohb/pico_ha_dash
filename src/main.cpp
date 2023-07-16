@@ -11,9 +11,10 @@
 #include "Ha.h"
 #include "Status.h"
 #include "Utils.h"
+#include "Lcd.h"
 #include "secrets.h"
 
-hd44780_I2Cexp lcd(39);
+Lcd lcd(std::make_unique<hd44780_I2Cexp>(39));
 
 Ha ha;
 Statuses statuses;
@@ -35,20 +36,11 @@ void SetupWiFi() {
     NTP.waitSet();
 }
 
-void SetupLCD() {
-    Wire.setSDA(12);
-    Wire.setSCL(13);
-
-    lcd.begin(20, 4);
-    lcd.setBacklight(1);
-
-    CreateLcdChars(lcd);
-}
-
 void setup() {
     Serial.begin(115200);
     SetupWiFi();
-    SetupLCD();
+
+    lcd.Begin();
 
     pinMode(lightBtn, INPUT_PULLUP);
 
@@ -79,28 +71,26 @@ void loop() {
     }
 
     if (!ha.IsLightOn()) {
-        lcd.noBacklight();
+        lcd.BacklightOff();
         return;
     } else
-        lcd.backlight();
+        lcd.BacklightOn();
 
     int i = 0;
     for(Status& status : statuses.statuses) {
         bool alive = status.alive;
 
-        lcd.setCursor(0, i + 1);
-        lcd.write(alive ? tick : cross);
-        lcdp(lcd, 2, i + 1, "{}", status.name);
+        lcd.Print(0, i + 1, "{} {}", alive ? lcd.tick : lcd.cross, status.name);
 
         i++;
     }
 
-    lcdp(lcd, 0, 0, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
+    lcd.Print(0, 0, "{}    {:.1f}   {:.1f}", ha.Time(), ha.ths1Temp(), ha.ths2Temp());
     
     if (ha.octopi.printStatus == "Printing")
-        lcdp(lcd, 10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
+        lcd.Print(10, 2, "{:02d}%  {}", ha.octopi.printProgress, ha.octopi.completionTime);
     else
-        lcdp(lcd, 10, 2, "          ");
+        lcd.Print(10, 2, "          ");
 
     const int completed = std::accumulate(
         ha.habitica.dailies.begin(),
@@ -111,6 +101,6 @@ void loop() {
         }
     );
 
-    lcdp(lcd, 17, 3, "{}/{}", completed, ha.habitica.dailies.size());
+    lcd.Print(17, 3, "{}/{}", completed, ha.habitica.dailies.size());
 }
 
