@@ -9,6 +9,13 @@
       buildInputs = with pkgs; [
         ccls
         platformio
+        python3
+        gcc-arm-embedded
+        picotool
+        # This is a serial monitor
+        # This isn't named after the pico
+        # Just a coincidence
+        picocom
       ];
     };
   };
