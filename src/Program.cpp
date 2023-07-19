@@ -124,10 +124,10 @@ void Program::DrawPlayer() {
         );
     };
 
-    DrawBar(0, "HP", ha.habitica.health, ha.habitica.maxHealth);
-    DrawBar(1, "XP", ha.habitica.exp, ha.habitica.expToNextLvl);
-    DrawBar(2, "MA", ha.habitica.mana, ha.habitica.maxMana);
-    lcd.Print(0, 3, "{:<20}", "");
+    lcd.Print(0, 0, "        LVL {:<8}", ha.habitica.level);
+    DrawBar(1, "HP", ha.habitica.health, ha.habitica.maxHealth);
+    DrawBar(2, "XP", ha.habitica.exp, ha.habitica.expToNextLvl);
+    DrawBar(3, "MA", ha.habitica.mana, ha.habitica.maxMana);
 }
 
 void Program::DrawEmptyPage(int i) {
