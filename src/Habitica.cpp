@@ -1,3 +1,7 @@
+#include <range/v3/all.hpp>
+namespace rg = ranges;
+namespace rv = ranges::views;
+
 #include "Habitica.h"
 #include "Utils.h"
 
@@ -28,32 +32,34 @@ void Habitica::Update(Entities& entities) {
     maxHealth = std::stof(entities["sensor.habitica_arlo_maxhealth"].state);
     mana = std::stof(entities["sensor.habitica_arlo_mp"].state);
     maxMana = std::stof(entities["sensor.habitica_arlo_maxmp"].state);
-    
-    dailies.clear();
-    const auto& dailiesAttrs = entities["sensor.habitica_arlo_dailys"].attrs;
-    
-    for(const auto& [id, jsonString]: dailiesAttrs) {
-        if (!Habitica::IsId(id)) continue;
 
-        StaticJsonDocument<1024> json;
-        deserializeJson(json, jsonString);
+    dailies = entities["sensor.habitica_arlo_dailys"].attrs
+        | rv::filter([](const auto& pair) {
+            return Habitica::IsId(pair.first);
+        })
+        | rv::transform([](const auto& pair) {
+            const auto& [id, jsonString] = pair;
 
-        Daily daily(id, json);
-        dailies.push_back(daily);
-    }
+            StaticJsonDocument<1024> json;
+            deserializeJson(json, jsonString);
 
-    todos.clear();
-    const auto& todosAttrs = entities["sensor.habitica_arlo_todos"].attrs;
+            return Daily(id, json);
+        })
+        | rg::to_vector;
 
-    for(const auto& [id, jsonString]: todosAttrs) {
-        if (!Habitica::IsId(id)) continue;
+    todos = entities["sensor.habitica_arlo_todos"].attrs
+        | rv::filter([](const auto& pair) {
+            return Habitica::IsId(pair.first);
+        })
+        | rv::transform([](const auto& pair) {
+            const auto& [id, jsonString] = pair;
 
-        StaticJsonDocument<1024> json;
-        deserializeJson(json, jsonString);
+            StaticJsonDocument<1024> json;
+            deserializeJson(json, jsonString);
 
-        Todo todo(id, json);
-        todos.push_back(todo);
-    }
+            return Todo(id, json);
+        })
+        | rg::to_vector;
 }
 
 bool Habitica::IsId(const std::string& id) {
