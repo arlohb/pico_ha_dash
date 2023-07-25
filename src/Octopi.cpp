@@ -4,7 +4,7 @@ void Octopi::Update(Entities& entities) {
     printStatus = entities["sensor.octoprint_print_status"].state;
 
     // To stop later operations from failing
-    if (printStatus == "unavailable")
+    if (printStatus == "unavailable" || printStatus == "Offline")
         return;
 
     printFile = entities["sensor.octoprint_print_file"].state;
