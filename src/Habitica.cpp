@@ -21,17 +21,17 @@ Todo::Todo(std::string id, JsonDocument& json):
     priority(json["priority"].as<float>()) {}
 
 void Habitica::Update(Entities& entities) {
-    name = entities["sensor.habitica_arlo_name"].state;
-    playerClass = entities["sensor.habitica_arlo_class"].state;
-    level = std::stoi(entities["sensor.habitica_arlo_lvl"].state);
+    name = entities.Take<std::string>("sensor.habitica_arlo_name");
+    playerClass = entities.Take<std::string>("sensor.habitica_arlo_class");
+    level = entities.Take<int>("sensor.habitica_arlo_lvl");
 
-    exp = std::stof(entities["sensor.habitica_arlo_exp"].state);
-    expToNextLvl = std::stof(entities["sensor.habitica_arlo_tonextlevel"].state);
-    gold = std::stof(entities["sensor.habitica_arlo_gp"].state);
-    health = std::stof(entities["sensor.habitica_arlo_hp"].state);
-    maxHealth = std::stof(entities["sensor.habitica_arlo_maxhealth"].state);
-    mana = std::stof(entities["sensor.habitica_arlo_mp"].state);
-    maxMana = std::stof(entities["sensor.habitica_arlo_maxmp"].state);
+    exp = entities.Take<float>("sensor.habitica_arlo_exp");
+    expToNextLvl = entities.Take<float>("sensor.habitica_arlo_tonextlevel");
+    gold = entities.Take<float>("sensor.habitica_arlo_gp");
+    health = entities.Take<float>("sensor.habitica_arlo_hp");
+    maxHealth = entities.Take<float>("sensor.habitica_arlo_maxhealth");
+    mana = entities.Take<float>("sensor.habitica_arlo_mp");
+    maxMana = entities.Take<float>("sensor.habitica_arlo_maxmp");
 
     dailies = entities["sensor.habitica_arlo_dailys"].attrs
         | rv::filter([](const auto& pair) {
@@ -46,6 +46,7 @@ void Habitica::Update(Entities& entities) {
             return Daily(id, json);
         })
         | rg::to_vector;
+    entities.erase("sensor.habitica_arlo_dailys");
 
     todos = entities["sensor.habitica_arlo_todos"].attrs
         | rv::filter([](const auto& pair) {
@@ -60,6 +61,7 @@ void Habitica::Update(Entities& entities) {
             return Todo(id, json);
         })
         | rg::to_vector;
+    entities.erase("sensor.habitica_arlo_todos");
 }
 
 bool Habitica::IsId(const std::string& id) {

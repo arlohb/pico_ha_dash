@@ -46,11 +46,12 @@ void Ha::CallService(std::string service, std::string body) {
 }
 
 std::string Ha::Time() {
-    return entities[timeId].state;
+    return entities.Get<std::string>(timeId);
 }
 
 bool Ha::IsLightOn() {
-    std::string state = entities["light.tz3210_ttkgurpb_ts0504b_light"].state;
+    return true;
+    std::string state = entities.Get<std::string>(lightId);
     return state == "on";
 }
 
@@ -76,10 +77,10 @@ void Ha::LightToggle() {
 }
 
 float Ha::ths1Temp() {
-    return std::stof(entities[ths1Id].state);
+    return entities.Get<float>(ths1Id);
 }
 
 float Ha::ths2Temp() {
-    return std::stof(entities[ths2Id].state);
+    return entities.Get<float>(ths2Id);
 }
 

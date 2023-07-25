@@ -1,24 +1,25 @@
 #include "Octopi.h"
+#include "Utils.h"
 
 void Octopi::Update(Entities& entities) {
-    printStatus = entities["sensor.octoprint_print_status"].state;
+    printStatus = entities.Take<std::string>("sensor.octoprint_print_status");
 
     // To stop later operations from failing
     if (printStatus == "unavailable" || printStatus == "Offline")
         return;
 
-    printFile = entities["sensor.octoprint_print_file"].state;
-    printProgress = std::stoi(entities["sensor.octoprint_print_progress"].state);
+    printFile = entities.Take<std::string>("sensor.octoprint_print_file");
+    printProgress = entities.Take<int>("sensor.octoprint_print_progress");
 
-    std::string completionDate = entities["sensor.octoprint_approximate_completion_time"].state;
+    std::string completionDate = entities.Take<std::string>("sensor.octoprint_approximate_completion_time");
     completionTime = completionDate.substr(completionDate.length() - 8, 5);
-    printTimeTotal = entities["sensor.octoprint_approximate_total_print_time"].state;
-    printTimeDone = entities["sensor.octoprint_print_time"].state;
-    printTimeLeft = entities["sensor.octoprint_print_time_left"].state;
+    printTimeTotal = entities.Take<std::string>("sensor.octoprint_approximate_total_print_time");
+    printTimeDone = entities.Take<std::string>("sensor.octoprint_print_time");
+    printTimeLeft = entities.Take<std::string>("sensor.octoprint_print_time_left");
 
-    socTemp = std::stof(entities["sensor.octoprint_soc_temperature"].state);
-    bedTarget = std::stof(entities["sensor.octoprint_bed_target"].state);
-    bedTemp = std::stof(entities["sensor.octoprint_bed_temperature"].state);
-    toolTarget = std::stof(entities["sensor.octoprint_tool_0_target"].state);
-    toolTemp = std::stof(entities["sensor.octoprint_tool_0_temperature"].state);
+    socTemp = entities.Take<float>("sensor.octoprint_soc_temperature");
+    bedTarget = entities.Take<float>("sensor.octoprint_bed_target");
+    bedTemp = entities.Take<float>("sensor.octoprint_bed_temperature");
+    toolTarget = entities.Take<float>("sensor.octoprint_tool_0_target");
+    toolTemp = entities.Take<float>("sensor.octoprint_tool_0_temperature");
 }
