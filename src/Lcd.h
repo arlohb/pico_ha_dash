@@ -5,6 +5,7 @@
 #include <fmt/core.h>
 
 #include <memory>
+#include <array>
 
 class Lcd {
     public:
@@ -27,7 +28,8 @@ class Lcd {
     private:
         std::unique_ptr<hd44780> lcd;
 
-        const byte crossChar[8] = {
+        const std::array<byte[8], 2> customChars = {{
+            // Cross
             0b00000,
             0b10001,
             0b01010,
@@ -35,10 +37,9 @@ class Lcd {
             0b00100,
             0b01010,
             0b10001,
-            0b00000
-        };
+            0b00000,
 
-        const byte tickChar[8] = {
+            // Tick
             0b00000,
             0b00000,
             0b01010,
@@ -47,7 +48,7 @@ class Lcd {
             0b01110,
             0b00000,
             0b00000
-        };
+        }};
 };
 
 // This has to be defined in the header file

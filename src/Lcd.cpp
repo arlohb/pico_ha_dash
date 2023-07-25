@@ -11,8 +11,9 @@ Lcd::Lcd(std::unique_ptr<hd44780> lcd):
     this->lcd->begin(20, 4);
     this->lcd->setBacklight(1);
 
-    this->lcd->createChar(cross, crossChar);
-    this->lcd->createChar(tick, tickChar);
+    int i = 0;
+    for(auto& customChar : customChars)
+        this->lcd->createChar(i++, customChar);
 }
 
 void Lcd::BacklightOn() {
