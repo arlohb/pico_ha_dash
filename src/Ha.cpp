@@ -50,7 +50,6 @@ std::string Ha::Time() {
 }
 
 bool Ha::IsLightOn() {
-    return true;
     std::string state = entities.Get<std::string>(lightId);
     return state == "on";
 }
